@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
+    "pretty": "prettier --write .",
     "build": "npm install && npx tsc",
     "start": "node ./dist/bin/www.js",
     "dev": "nodemon ./dist/bin/www.js",
