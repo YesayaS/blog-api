@@ -31,10 +31,6 @@ const validate_passwordconfirm = () =>
 
 const validate_admin = () => body("admin").trim().escape();
 
-export const get_login = asyncHandler(function (req, res, next) {
-  res.json({ msg: "get_login" });
-});
-
 export const post_login = asyncHandler(function (req, res, next) {
   res.json({ msg: "post_login" });
 });
