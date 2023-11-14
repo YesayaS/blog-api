@@ -3,12 +3,14 @@ import express, { Request, Response, NextFunction } from "express";
 import path from "path";
 import cookieParser from "cookie-parser";
 import logger from "morgan";
+import passport from "passport";
 
 require("dotenv").config();
 
 import * as errorHandler from "./lib/errorHandler";
 import apiRouter from "./routes/api";
 import authRouter from "./routes/auth";
+import { localLogin } from "./lib/auth";
 
 var app = express();
 
@@ -26,6 +28,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
+
+passport.use(localLogin);
+app.use(passport.initialize());
 
 app.use("/api", apiRouter);
 app.use("/auth", authRouter);

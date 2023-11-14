@@ -1,10 +1,19 @@
 import asyncHandler from "express-async-handler";
 import { body, validationResult } from "express-validator";
-const bcrypt = require("bcryptjs");
+import passport from "passport";
+import bcrypt from "bcryptjs";
 import createError from "http-errors";
+import jwt from "jsonwebtoken";
+require("dotenv").config();
 
 import User from "../models/user";
 import Passcode from "../models/passcode";
+
+interface UserInterface {
+  username: string;
+  password: string;
+  is_admin: boolean;
+}
 
 const validate_username = () =>
   body("username")
@@ -31,9 +40,37 @@ const validate_passwordconfirm = () =>
 
 const validate_admin = () => body("admin").trim().escape();
 
-export const post_login = asyncHandler(function (req, res, next) {
-  res.json({ msg: "post_login" });
-});
+export const post_login = [
+  validate_username(),
+  validate_password(),
+  asyncHandler(async (req, res, next) => {
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      const err = createError(400, errors.array()[0].msg);
+      return next(err);
+    } else {
+      passport.authenticate(
+        "local",
+        { session: false },
+        (err: Error, user: UserInterface, info: any) => {
+          if (err || !user) {
+            return res
+              .status(400)
+              .json({ message: "Login failed", success: false });
+          }
+
+          const token = jwt.sign(
+            { username: user.username, is_admin: user.is_admin },
+            "your_secret_key",
+            { expiresIn: 1 * 24 * 60 * 6000 }
+          );
+          return res.json({ token, success: true });
+        }
+      )(req, res, next);
+    }
+  }),
+];
 
 export const post_signup = [
   validate_username()
