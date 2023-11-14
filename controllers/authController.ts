@@ -1,4 +1,3 @@
-import { NextFunction, Response, Request } from "express";
 import asyncHandler from "express-async-handler";
 import { body, validationResult } from "express-validator";
 const bcrypt = require("bcryptjs");
@@ -6,7 +5,6 @@ import createError from "http-errors";
 
 import User from "../models/user";
 import Passcode from "../models/passcode";
-import { errorLogger } from "../lib/errorHandler";
 
 const validate_username = () =>
   body("username")
