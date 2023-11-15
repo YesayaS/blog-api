@@ -9,7 +9,6 @@ require("dotenv").config();
 
 import * as errorHandler from "./lib/errorHandler";
 import apiRouter from "./routes/api";
-import authRouter from "./routes/auth";
 import { localLogin } from "./lib/auth";
 
 var app = express();
@@ -33,7 +32,6 @@ passport.use(localLogin);
 app.use(passport.initialize());
 
 app.use("/api", apiRouter);
-app.use("/auth", authRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req: Request, res: Response, next) {
