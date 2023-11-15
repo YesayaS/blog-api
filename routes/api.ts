@@ -1,3 +1,4 @@
+import passport from "passport";
 import express, { Request, Response, NextFunction } from "express";
 var router = express.Router();
 
@@ -10,11 +11,15 @@ router.get("/", function (req, res, next) {
   res.json({ msg: "hi there!" });
 });
 
-router.post("/login", authController.post_login);
-router.post("/signup", userController.post_signup);
+router.post("/login", authController.loginPOST);
+router.post("/signup", userController.signupPOST);
 
-// router.get("post/:id", postController.get_post);
-// router.post("post/", postController.post_post);
+// router.get("post/:id", postController.postGET);
+router.post(
+  "/post",
+  passport.authenticate("jwt", { session: false }),
+  postController.postPOST
+);
 // router.put("post/:id", postController.put_post);
 // router.delete("post/:id", postController.delete_post);
 
