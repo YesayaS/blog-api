@@ -3,8 +3,9 @@ import { validationResult } from "express-validator";
 import createError from "http-errors";
 import { Types } from "mongoose";
 
-import Post from "../models/post";
 import Comment from "../models/comment";
+import Post from "../models/post";
+import User from "../models/user";
 
 import {
   validatePostTitle,
@@ -31,7 +32,7 @@ export const postGET = [
         res.json({ post, success: true });
       }
     } catch (err) {
-      throw createError(404);
+      throw next(err);
     }
   }),
 ];
@@ -41,8 +42,6 @@ export const postPOST = [
   validatePostContent(),
   validatePostPrivate(),
   asyncHandler(async function (req, res, next) {
-    console.log(req.user);
-
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
@@ -63,9 +62,45 @@ export const postPOST = [
   }),
 ];
 
-// export const put_post = asyncHandler(function (req, res, next) {
-//   res.json({ msg: "put_post" });
-// });
+export const postPUT = [
+  validatePostTitle(),
+  validatePostContent(),
+  validatePostPrivate(),
+  asyncHandler(async function (req, res, next) {
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      const err = createError(400, errors.array()[0].msg);
+      return next(err);
+    } else {
+      try {
+        const post = await Post.findById(req.params.id);
+        if (
+          post?.author._id.toString() !==
+          (req.user as UserWithId)._id.toString()
+        ) {
+          throw createError(
+            403,
+            "Don't have permission to perform this action."
+          );
+        }
+        const updatedPost = new Post({
+          _id: req.params.id,
+          title: req.body.title,
+          content: req.body.content,
+          comment: post?.comment,
+          publication_date: post?.publication_date,
+          author: post?.author,
+          is_private: req.body.isprivate,
+        });
+        const result = await Post.findByIdAndUpdate(req.params.id, updatedPost);
+        res.json({ msg: "Post updated", success: true });
+      } catch (err) {
+        return next(err);
+      }
+    }
+  }),
+];
 
 // export const delete_post = asyncHandler(function (req, res, next) {
 //   res.json({ msg: "delete_post" });

@@ -20,8 +20,12 @@ router.post(
   passport.authenticate("jwt", { session: false }),
   postController.postPOST
 );
-// router.put("post/:id", postController.put_post);
-// router.delete("post/:id", postController.delete_post);
+router.put(
+  "/post/:id",
+  passport.authenticate("jwt", { session: false }),
+  postController.postPUT
+);
+// router.delete("/post/:id", postController.delete_post);
 
 // router.get("/posts", postController.get_posts);
 // router.get("/posts/recent", postController.get_posts_recent);
