@@ -1,5 +1,5 @@
 import asyncHandler from "express-async-handler";
-import { body, validationResult } from "express-validator";
+import { validationResult } from "express-validator";
 import createError from "http-errors";
 import bcrypt from "bcryptjs";
 
@@ -13,7 +13,7 @@ import {
 import User from "../models/user";
 import Passcode from "../models/passcode";
 
-export const post_signup = [
+export const signupPOST = [
   validateSignupUsername()
     .bail()
     .custom(async (username) => {

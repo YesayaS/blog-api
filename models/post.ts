@@ -1,19 +1,19 @@
 import { Schema, model, Types } from "mongoose";
 
-interface Post {
-  title: string;
-  content: string;
-  comment: Types.ObjectId;
-  publication_date: Date;
-  author: Types.ObjectId;
-  is_private: boolean;
-}
+// interface Post {
+//   title: string;
+//   content: string;
+//   comment: Types.ObjectId;
+//   publication_date: Date;
+//   author: Types.ObjectId;
+//   is_private: boolean;
+// }
 
-const PostSchema = new Schema<Post>({
+const PostSchema = new Schema({
   title: { type: String, required: true },
   content: { type: String, required: true },
   comment: { type: Schema.Types.ObjectId, ref: "Comment" },
-  publication_date: { type: Date, required: true },
+  publication_date: { type: Date },
   author: {
     type: Schema.Types.ObjectId,
     ref: "User",
