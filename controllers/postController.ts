@@ -102,9 +102,23 @@ export const postPUT = [
   }),
 ];
 
-// export const delete_post = asyncHandler(function (req, res, next) {
-//   res.json({ msg: "delete_post" });
-// });
+export const postDELETE = [
+  asyncHandler(async function (req, res, next) {
+    try {
+      const post = await Post.findById(req.params.id);
+      if (!post) throw createError(405, "Method Not Allowed");
+      if (
+        post?.author._id.toString() !== (req.user as UserWithId)._id.toString()
+      ) {
+        throw createError(403, "Don't have permission to perform this action.");
+      }
+      const result = await Post.findByIdAndDelete(req.params.id);
+      res.json({ msg: "Post deleted", success: true });
+    } catch (err) {
+      return next(err);
+    }
+  }),
+];
 
 // export const get_posts = asyncHandler(function (req, res, next) {
 //   res.json({ msg: "get_posts" });
