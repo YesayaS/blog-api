@@ -4,6 +4,7 @@ import createError from "http-errors";
 import { Types } from "mongoose";
 
 import Post from "../models/post";
+import Comment from "../models/comment";
 
 import {
   validatePostTitle,
@@ -19,9 +20,21 @@ type UserWithId = {
   __v: number;
 };
 
-// export const postGET = asyncHandler(function (req, res, next) {
-//   res.json({ msg: "post_get" });
-// });
+export const postGET = [
+  asyncHandler(async function (req, res, next) {
+    try {
+      const post = await Post.findById(req.params.id)
+        .populate("comment")
+        .populate("author", "username");
+
+      if (post) {
+        res.json({ post, success: true });
+      }
+    } catch (err) {
+      throw createError(404);
+    }
+  }),
+];
 
 export const postPOST = [
   validatePostTitle(),
@@ -39,7 +52,7 @@ export const postPOST = [
       const post = new Post({
         title: req.body.title,
         content: req.body.content,
-        comment: null,
+        comment: [new Comment()],
         publication_date: new Date().toISOString(),
         author: (req.user as UserWithId)._id,
         is_private: req.body.isprivate,

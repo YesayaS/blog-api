@@ -14,7 +14,7 @@ router.get("/", function (req, res, next) {
 router.post("/login", authController.loginPOST);
 router.post("/signup", userController.signupPOST);
 
-// router.get("post/:id", postController.postGET);
+router.get("/post/:id", postController.postGET);
 router.post(
   "/post",
   passport.authenticate("jwt", { session: false }),

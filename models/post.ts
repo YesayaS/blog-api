@@ -12,7 +12,7 @@ import { Schema, model, Types } from "mongoose";
 const PostSchema = new Schema({
   title: { type: String, required: true },
   content: { type: String, required: true },
-  comment: { type: Schema.Types.ObjectId, ref: "Comment" },
+  comment: [{ type: Schema.Types.ObjectId, ref: "Comment" }],
   publication_date: { type: Date },
   author: {
     type: Schema.Types.ObjectId,
