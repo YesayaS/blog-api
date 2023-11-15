@@ -13,7 +13,7 @@ interface UserInterface {
   is_admin: boolean;
 }
 
-export const post_login = [
+export const loginPOST = [
   validateLoginUsername(),
   validateLoginPassword(),
   asyncHandler(async (req, res, next) => {
@@ -34,7 +34,7 @@ export const post_login = [
           }
 
           const token = jwt.sign(
-            { username: user.username, is_admin: user.is_admin },
+            { username: user.username },
             "your_secret_key",
             { expiresIn: 1 * 24 * 60 * 6000 }
           );
