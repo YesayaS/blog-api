@@ -3,7 +3,7 @@ var router = express.Router();
 
 import * as authController from "../controllers/authController";
 import * as postController from "../controllers/postController";
-import * as commentController from "../controllers/commentController";
+import * as userController from "../controllers/userController";
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
@@ -11,7 +11,7 @@ router.get("/", function (req, res, next) {
 });
 
 router.post("/login", authController.post_login);
-router.post("/signup", authController.post_signup);
+router.post("/signup", userController.post_signup);
 
 // router.get("post/:id", postController.get_post);
 // router.post("post/", postController.post_post);
