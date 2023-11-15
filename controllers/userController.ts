@@ -1,39 +1,20 @@
-import { NextFunction, Response, Request } from "express";
 import asyncHandler from "express-async-handler";
 import { body, validationResult } from "express-validator";
 import createError from "http-errors";
 import bcrypt from "bcryptjs";
 
+import {
+  validateSignupUsername,
+  validateSignupPassword,
+  validateSignupPasswordconfirm,
+  validateSignupAdmin,
+} from "../lib/validator";
+
 import User from "../models/user";
 import Passcode from "../models/passcode";
 
-const validate_username = () =>
-  body("username")
-    .trim()
-    .isLength({ min: 3 })
-    .withMessage("Username must be at least 3 characters")
-    .custom((value) => !/\s/.test(value))
-    .withMessage("Username should not have a space")
-    .isAlphanumeric()
-    .withMessage("Username should not have a special character")
-    .escape();
-
-const validate_password = () =>
-  body("password", "Password must be at least 6 characters")
-    .isLength({ min: 6 })
-    .escape();
-
-const validate_passwordconfirm = () =>
-  body("password-confirm", "Confirmation password must same as password")
-    .custom((value, { req }) => {
-      return value === req.body.password;
-    })
-    .escape();
-
-const validate_admin = () => body("admin").trim().escape();
-
 export const post_signup = [
-  validate_username()
+  validateSignupUsername()
     .bail()
     .custom(async (username) => {
       const usernameTaken = await User.exists({
@@ -43,9 +24,9 @@ export const post_signup = [
         return Promise.reject("Username is already taken.");
       }
     }),
-  validate_password(),
-  validate_passwordconfirm(),
-  validate_admin(),
+  validateSignupPassword(),
+  validateSignupPasswordconfirm(),
+  validateSignupAdmin(),
 
   asyncHandler(async (req, res, next) => {
     const errors = validationResult(req);

@@ -1,13 +1,11 @@
 import asyncHandler from "express-async-handler";
-import { body, validationResult } from "express-validator";
+import { validationResult } from "express-validator";
 import passport from "passport";
-import bcrypt from "bcryptjs";
 import createError from "http-errors";
 import jwt from "jsonwebtoken";
 require("dotenv").config();
 
-import User from "../models/user";
-import Passcode from "../models/passcode";
+import { validateLoginUsername, validateLoginPassword } from "../lib/validator";
 
 interface UserInterface {
   username: string;
@@ -15,34 +13,9 @@ interface UserInterface {
   is_admin: boolean;
 }
 
-const validate_username = () =>
-  body("username")
-    .trim()
-    .isLength({ min: 3 })
-    .withMessage("Username must be at least 3 characters")
-    .custom((value) => !/\s/.test(value))
-    .withMessage("Username should not have a space")
-    .isAlphanumeric()
-    .withMessage("Username should not have a special character")
-    .escape();
-
-const validate_password = () =>
-  body("password", "Password must be at least 6 characters")
-    .isLength({ min: 6 })
-    .escape();
-
-const validate_passwordconfirm = () =>
-  body("password-confirm", "Confirmation password must same as password")
-    .custom((value, { req }) => {
-      return value === req.body.password;
-    })
-    .escape();
-
-const validate_admin = () => body("admin").trim().escape();
-
 export const post_login = [
-  validate_username(),
-  validate_password(),
+  validateLoginUsername(),
+  validateLoginPassword(),
   asyncHandler(async (req, res, next) => {
     const errors = validationResult(req);
 
