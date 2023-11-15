@@ -9,7 +9,7 @@ require("dotenv").config();
 
 import * as errorHandler from "./lib/errorHandler";
 import apiRouter from "./routes/api";
-import { localLogin } from "./lib/auth";
+import { localAuth, jwtAuth } from "./lib/auth";
 
 var app = express();
 
@@ -28,7 +28,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
-passport.use(localLogin);
+passport.use("local", localAuth);
+passport.use("jwt", jwtAuth);
 app.use(passport.initialize());
 
 app.use("/api", apiRouter);
