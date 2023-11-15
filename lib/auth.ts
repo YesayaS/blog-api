@@ -7,7 +7,6 @@ export const localLogin = new LocalStrategy(
   async (username: string, password: string, done: any) => {
     try {
       const user = await User.findOne({ username: username.toLowerCase() });
-      console.log(user);
 
       if (!user) {
         return done(null, false, { message: "Incorrect username" });
