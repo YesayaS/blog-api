@@ -40,6 +40,12 @@ router.post(
   commentController.commentPOST
 );
 
+router.put(
+  "/post/:postid/comment/:commentid",
+  passport.authenticate("jwt", { session: false }),
+  commentController.commentPUT
+);
+
 router.delete(
   "/post/:postid/comment/:commentid",
   passport.authenticate("jwt", { session: false }),

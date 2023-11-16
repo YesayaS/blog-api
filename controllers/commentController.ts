@@ -44,6 +44,53 @@ export const commentPOST = [
   }),
 ];
 
+export const commentPUT = [
+  validateCommentContent(),
+  asyncHandler(async function (req, res, next) {
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      const err = createError(400, errors.array()[0].msg);
+      return next(err);
+    } else {
+      try {
+        const comment = await Comment.findOne({
+          _id: req.params.postid,
+          comments: req.params.commentid,
+        });
+
+        if (!comment) {
+          throw createError(405, "Method Not Allowed");
+        }
+
+        const isAuthorized =
+          comment.author._id.toString() ===
+          (req.user as UserWithId)._id.toString();
+
+        if (!isAuthorized) {
+          throw createError(
+            403,
+            "Don't have permission to perform this action."
+          );
+        }
+
+        const updatedComment = {
+          content: req.body.content,
+        };
+
+        const result = await Comment.updateOne(
+          { _id: req.params.id },
+          { $set: updatedComment }
+        );
+
+        res.json({ msg: "Post updated", success: true });
+      } catch (err) {
+        return next(err);
+      }
+    }
+  }),
+];
+
 export const commentDELETE = [
   asyncHandler(async function (req, res, next) {
     try {
