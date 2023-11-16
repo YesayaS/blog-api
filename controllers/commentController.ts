@@ -43,3 +43,36 @@ export const commentPOST = [
     }
   }),
 ];
+
+export const commentDELETE = [
+  asyncHandler(async function (req, res, next) {
+    try {
+      const comment = await Comment.findById(req.params.commentid);
+
+      if (!comment) {
+        throw createError(405, "Method Not Allowed");
+      }
+
+      const isAuthorized =
+        comment.author._id.toString() ===
+        (req.user as UserWithId)._id.toString();
+
+      if (!isAuthorized) {
+        throw createError(403, "Don't have permission to perform this action.");
+      }
+
+      const postResult = await Post.updateOne(
+        { _id: req.params.postid },
+        { $pull: { comments: req.params.commentid } }
+      );
+
+      const commentResult = await Comment.findByIdAndDelete(
+        req.params.commentid
+      );
+
+      res.json({ msg: "Comment deleted", success: true });
+    } catch (err) {
+      next(err);
+    }
+  }),
+];

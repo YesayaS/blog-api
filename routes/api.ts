@@ -33,12 +33,17 @@ router.delete(
 );
 
 router.get("/posts", postController.postsGET);
-// router.get("/posts/recent", postController.get_posts_recent);
 
 router.post(
   "/post/:postid/comment",
   passport.authenticate("jwt", { session: false }),
   commentController.commentPOST
+);
+
+router.delete(
+  "/post/:postid/comment/:commentid",
+  passport.authenticate("jwt", { session: false }),
+  commentController.commentDELETE
 );
 
 export default router;
