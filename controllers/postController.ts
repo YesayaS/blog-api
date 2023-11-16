@@ -25,7 +25,7 @@ export const postGET = [
   asyncHandler(async function (req, res, next) {
     try {
       const post = await Post.findById(req.params.id)
-        .populate("comment")
+        .populate("comments")
         .populate("author", "username");
 
       if (post) {
@@ -51,7 +51,7 @@ export const postPOST = [
       const post = new Post({
         title: req.body.title,
         content: req.body.content,
-        comment: [],
+        comments: [],
         publication_date: new Date().toISOString(),
         author: (req.user as UserWithId)._id,
         is_published: req.body.ispublished,
@@ -119,7 +119,7 @@ export const postDELETE = [
   }),
 ];
 
-export const get_posts = [
+export const postsGET = [
   asyncHandler(async function (req, res, next) {
     try {
       const posts = await Post.find({ is_published: true })

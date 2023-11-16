@@ -46,3 +46,8 @@ export const validatePostContent = () =>
 export const validatePostPrivate = () =>
   body("ispublished", "Published Type Error").isBoolean().escape();
 // POST //
+
+// COMMENT //
+export const validateCommentContent = () =>
+  body("content", "Comment cannot be empty").notEmpty().isString().escape();
+// COMMENT //

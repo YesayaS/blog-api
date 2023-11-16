@@ -5,6 +5,7 @@ var router = express.Router();
 import * as authController from "../controllers/authController";
 import * as postController from "../controllers/postController";
 import * as userController from "../controllers/userController";
+import * as commentController from "../controllers/commentController";
 
 /* GET home page. */
 router.get("/", function (req, res, next) {
@@ -31,9 +32,13 @@ router.delete(
   postController.postDELETE
 );
 
-router.get("/posts", postController.get_posts);
+router.get("/posts", postController.postsGET);
 // router.get("/posts/recent", postController.get_posts_recent);
 
-// router.post("/comment", commentController.post_comment);
+router.post(
+  "/post/:postid/comment",
+  passport.authenticate("jwt", { session: false }),
+  commentController.commentPOST
+);
 
 export default router;
