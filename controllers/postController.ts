@@ -105,13 +105,18 @@ export const postDELETE = [
   asyncHandler(async function (req, res, next) {
     try {
       const post = await Post.findById(req.params.id);
+
       if (!post) throw createError(405, "Method Not Allowed");
-      if (
-        post?.author._id.toString() !== (req.user as UserWithId)._id.toString()
-      ) {
+
+      const isAuthorized =
+        post.author._id.toString() === (req.user as UserWithId)._id.toString();
+
+      if (!isAuthorized) {
         throw createError(403, "Don't have permission to perform this action.");
       }
+
       const result = await Post.findByIdAndDelete(req.params.id);
+
       res.json({ msg: "Post deleted", success: true });
     } catch (err) {
       return next(err);
