@@ -62,14 +62,20 @@ export const commentPUT = [
       return next(err);
     } else {
       try {
-        const comment = await Comment.findOne({
+        const post = await Post.findOne({
           _id: req.params.postid,
-          comments: req.params.commentid,
-        });
+          comments: { _id: req.params.commentid },
+        })
+          .select("comments")
+          .populate("comments");
 
-        if (!comment) {
+        console.log(post);
+
+        if (!post) {
           throw createError(405, "Method Not Allowed");
         }
+
+        const comment = new Comment(post.comments[0]);
 
         const isAuthorized =
           comment.author._id.toString() ===
@@ -87,7 +93,7 @@ export const commentPUT = [
         };
 
         const result = await Comment.updateOne(
-          { _id: req.params.id },
+          { _id: req.params.commentid },
           { $set: updatedComment }
         );
 
