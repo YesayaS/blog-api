@@ -25,17 +25,25 @@ export const commentPOST = [
       const err = createError(400, errors.array()[0].msg);
       return next(err);
     } else {
-      const comment = new Comment({
-        content: req.body.content,
-        date: new Date().toISOString(),
-        author: (req.user as UserWithId)._id,
-      });
+      const post = await Post.findById(req.params.postid);
+
+      if (!post) {
+        throw createError(405, "Method Not Allowed");
+      }
       try {
+        const comment = new Comment({
+          content: req.body.content,
+          date: new Date().toISOString(),
+          author: (req.user as UserWithId)._id,
+        });
+
         const commentResult = await comment.save();
+
         const post = await Post.updateOne(
           { _id: req.params.postid },
           { $push: { comments: commentResult._id } }
         );
+
         res.json({ msg: "Comment created", success: true });
       } catch (err) {
         next(err);
