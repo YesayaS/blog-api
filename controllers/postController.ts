@@ -84,16 +84,15 @@ export const postPUT = [
             "Don't have permission to perform this action."
           );
         }
-        const updatedPost = new Post({
-          _id: req.params.id,
+        const updatedPostField = {
           title: req.body.title,
           content: req.body.content,
-          comment: post?.comment,
-          publication_date: post?.publication_date,
-          author: post?.author,
           is_published: req.body.ispublished,
-        });
-        const result = await Post.findByIdAndUpdate(req.params.id, updatedPost);
+        };
+        const result = await Post.updateOne(
+          { _id: req.params.id },
+          { $set: updatedPostField }
+        );
         res.json({ msg: "Post updated", success: true });
       } catch (err) {
         return next(err);
