@@ -51,10 +51,10 @@ export const postPOST = [
       const post = new Post({
         title: req.body.title,
         content: req.body.content,
-        comment: [new Comment()],
+        comment: [],
         publication_date: new Date().toISOString(),
         author: (req.user as UserWithId)._id,
-        is_private: req.body.isprivate,
+        is_published: req.body.ispublished,
       });
       const result = await post.save();
       res.json({ msg: "Post created", success: true });
@@ -91,7 +91,7 @@ export const postPUT = [
           comment: post?.comment,
           publication_date: post?.publication_date,
           author: post?.author,
-          is_private: req.body.isprivate,
+          is_published: req.body.ispublished,
         });
         const result = await Post.findByIdAndUpdate(req.params.id, updatedPost);
         res.json({ msg: "Post updated", success: true });
@@ -120,10 +120,20 @@ export const postDELETE = [
   }),
 ];
 
-// export const get_posts = asyncHandler(function (req, res, next) {
-//   res.json({ msg: "get_posts" });
-// });
+export const get_posts = [
+  asyncHandler(async function (req, res, next) {
+    try {
+      const posts = await Post.find({ is_published: true })
+        .select("title content publication_date author")
+        .sort({ publication_date: -1 })
+        .limit(10)
+        .populate("author", "username");
 
-// export const get_posts_recent = asyncHandler(function (req, res, next) {
-//   res.json({ msg: "getget_posts_recent_posts" });
-// });
+      if (posts) {
+        res.json({ posts, success: true });
+      }
+    } catch (err) {
+      throw next(err);
+    }
+  }),
+];

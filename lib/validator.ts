@@ -44,5 +44,5 @@ export const validatePostTitle = () =>
 export const validatePostContent = () =>
   body("content", "Content cannot be empty").notEmpty().isString().escape();
 export const validatePostPrivate = () =>
-  body("isprivate", "Type Error").isBoolean().escape();
+  body("ispublished", "Published Type Error").isBoolean().escape();
 // POST //

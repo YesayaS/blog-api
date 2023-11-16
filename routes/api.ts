@@ -31,7 +31,7 @@ router.delete(
   postController.postDELETE
 );
 
-// router.get("/posts", postController.get_posts);
+router.get("/posts", postController.get_posts);
 // router.get("/posts/recent", postController.get_posts_recent);
 
 // router.post("/comment", commentController.post_comment);

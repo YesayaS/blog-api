@@ -19,7 +19,7 @@ const PostSchema = new Schema({
     ref: "User",
     required: true,
   },
-  is_private: { type: Boolean, required: true, default: true },
+  is_published: { type: Boolean, required: true, default: true },
 });
 
 // Virtual for bookinstance's URL
