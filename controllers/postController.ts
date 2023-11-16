@@ -25,7 +25,10 @@ export const postGET = [
   asyncHandler(async function (req, res, next) {
     try {
       const post = await Post.findById(req.params.id)
-        .populate("comments")
+        .populate({
+          path: "comments",
+          populate: { path: "author", select: "username" },
+        })
         .populate("author", "username");
 
       if (post) {
