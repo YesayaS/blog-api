@@ -97,7 +97,7 @@ export const commentPUT = [
           { $set: updatedComment }
         );
 
-        res.json({ msg: "Post updated", success: true });
+        res.json({ msg: "Comment updated", success: true });
       } catch (err) {
         return next(err);
       }
