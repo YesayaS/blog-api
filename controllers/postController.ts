@@ -22,7 +22,7 @@ type UserWithId = {
   is_admin: boolean;
   __v: number;
 };
-// TODO: SHOULD RETURN 404 when post is not found
+
 export const postGET = [
   asyncHandler(async function (req, res, next) {
     try {
@@ -33,11 +33,13 @@ export const postGET = [
         })
         .populate("author", "username");
 
-      if (post) {
-        res.json({ post, success: true });
+      if (!post) {
+        return res.status(404).json({ error: "Page not found" });
       }
+
+      res.json({ post, success: true });
     } catch (err) {
-      throw next(err);
+      return res.status(500).json({ error: "Internal server error" });
     }
   }),
 ];
