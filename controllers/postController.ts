@@ -9,6 +9,8 @@ import User from "../models/user";
 
 import {
   validatePostTitle,
+  validatePostSubTitle,
+  validatePostTitleImg,
   validatePostContent,
   validatePostPrivate,
 } from "../lib/validator";
@@ -20,7 +22,7 @@ type UserWithId = {
   is_admin: boolean;
   __v: number;
 };
-
+// TODO: SHOULD RETURN 404 when post is not found
 export const postGET = [
   asyncHandler(async function (req, res, next) {
     try {
@@ -42,6 +44,8 @@ export const postGET = [
 
 export const postPOST = [
   validatePostTitle(),
+  validatePostSubTitle(),
+  validatePostTitleImg(),
   validatePostContent(),
   validatePostPrivate(),
   asyncHandler(async function (req, res, next) {
@@ -53,6 +57,8 @@ export const postPOST = [
     } else {
       const post = new Post({
         title: req.body.title,
+        sub_title: req.body.sub_title,
+        title_img: req.body.title_img,
         content: req.body.content,
         comments: [],
         publication_date: new Date().toISOString(),

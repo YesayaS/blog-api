@@ -41,6 +41,10 @@ export const validateSignupAdmin = () => body("admin").trim().escape();
 // POST //
 export const validatePostTitle = () =>
   body("title", "Title cannot be empty").notEmpty().isString().escape();
+export const validatePostSubTitle = () =>
+  body("content", "Subtitle is not string").isString().escape();
+export const validatePostTitleImg = () =>
+  body("content", "Subtitle is not string").isString().escape();
 export const validatePostContent = () =>
   body("content", "Content cannot be empty").notEmpty().isString().escape();
 export const validatePostPrivate = () =>

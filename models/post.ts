@@ -2,6 +2,8 @@ import { Schema, model, Types } from "mongoose";
 
 const PostSchema = new Schema({
   title: { type: String, required: true },
+  sub_title: { type: String, required: true },
+  title_img: { type: String, required: true },
   content: { type: String, required: true },
   comments: [{ type: Schema.Types.ObjectId, ref: "Comment" }],
   publication_date: { type: Date },
