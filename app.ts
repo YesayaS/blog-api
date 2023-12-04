@@ -4,6 +4,7 @@ import path from "path";
 import cookieParser from "cookie-parser";
 import logger from "morgan";
 import passport from "passport";
+var cors = require("cors");
 
 require("dotenv").config();
 
@@ -22,6 +23,7 @@ async function main() {
   await mongoose.connect(mongoDB);
 }
 
+app.use(cors());
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
