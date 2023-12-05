@@ -25,22 +25,18 @@ type UserWithId = {
 
 export const postGET = [
   asyncHandler(async function (req, res, next) {
-    try {
-      const post = await Post.findById(req.params.id)
-        .populate({
-          path: "comments",
-          populate: { path: "author", select: "username" },
-        })
-        .populate("author", "username");
+    const post = await Post.findById(req.params.id)
+      .populate({
+        path: "comments",
+        populate: { path: "author", select: "username" },
+      })
+      .populate("author", "username");
 
-      if (!post) {
-        return res.status(404).json({ error: "Page not found" });
-      }
-
-      res.json({ post, success: true });
-    } catch (err) {
-      return next(err);
+    if (!post) {
+      res.status(404).json({ error: "Page not found" });
     }
+
+    res.json({ post, success: true });
   }),
 ];
 
