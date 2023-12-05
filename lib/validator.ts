@@ -9,9 +9,7 @@ export const validateLoginUsername = () =>
     .custom((value) => !/\s/.test(value))
     .escape();
 export const validateLoginPassword = () =>
-  body("password", "Password must be at least 6 characters")
-    .notEmpty()
-    .escape();
+  body("password", "Password must be filled").notEmpty().escape();
 // LOGIN //
 
 // SIGNUP //
