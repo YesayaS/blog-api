@@ -5,8 +5,9 @@
   "scripts": {
     "pretty": "prettier --write .",
     "build": "npm install && npx tsc",
-    "start": "node ./dist/bin/www.js",
-    "dev": "nodemon ./dist/bin/www.js",
+    "start": "NODE_ENV=production & node ./dist/bin/www.js",
+    "start_win": "SET NODE_ENV=production & node ./dist/bin/www.js",
+    "dev": "SET NODE_ENV=development & nodemon ./dist/bin/www.js",
     "serverstart": "concurrently \"npx tsc --watch\" \"SET DEBUG=blog-api:* & npm run dev\""
   },
   "dependencies": {
