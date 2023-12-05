@@ -39,7 +39,7 @@ export const postGET = [
 
       res.json({ post, success: true });
     } catch (err) {
-      return res.status(500).json({ error: "Internal server error" });
+      return next(err);
     }
   }),
 ];
