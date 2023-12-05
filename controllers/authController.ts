@@ -28,17 +28,17 @@ export const loginPOST = [
         { session: false },
         (err: Error, user: UserInterface, info: any) => {
           if (err || !user) {
-            return res
-              .status(400)
-              .json({ message: "Login failed", success: false });
+            return res.status(401).json({ message: "Login failed" });
           }
+
+          const tokenExpires = 24 * 60 * 60; // (h * m * s)
 
           const token = jwt.sign(
             { username: user.username },
             "your_secret_key",
-            { expiresIn: 1 * 24 * 60 * 6000 }
+            { expiresIn: tokenExpires }
           );
-          return res.json({ token, success: true });
+          return res.json({ token });
         }
       )(req, res, next);
     }
