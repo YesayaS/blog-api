@@ -36,11 +36,6 @@ app.use(passport.initialize());
 
 app.use("/api", apiRouter);
 
-// catch 404 and forward to error handler
-app.use(function (req: Request, res: Response, next) {
-  next(createError(404));
-});
-
 app.use(errorHandler.errorLogger);
 app.use(errorHandler.errorResponder);
 app.use(errorHandler.invalidPathHandler);
