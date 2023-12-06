@@ -6,12 +6,14 @@ export const errorLogger = (
   res: Response,
   next: NextFunction
 ) => {
-  console.log(req.body);
-  console.log(`Error ${err.message}`);
   console.error(err.stack);
+  console.log(`Request body : ${req.body}`);
+  console.log(`Error message : ${err.message}`);
+
   next(err);
 };
 
+// error middleware
 export const errorResponder = (
   err: any,
   req: Request,
@@ -22,22 +24,17 @@ export const errorResponder = (
   const status = err.status || 400;
 
   if (err.name === "CastError") {
-    res
-      .status(status)
-      .json({ error: `Invalid ${err.path}: ${err.value}`, success: false });
+    res.status(status).json({ error: `Invalid ${err.path}: ${err.value}` });
   }
 
-  res
-    .status(status)
-    .json({ error: err.message || "Something went wrong", success: false });
+  res.status(status).json({ error: err.message || "Something went wrong" });
 };
 
-// Fallback middleware for returning 404 error
-// for undefined paths
+// 404 middleware
 export const invalidPathHandler = (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  res.status(404).json({ error: "Invalid Path" });
+  res.status(404).json({ error: "Not found" });
 };
