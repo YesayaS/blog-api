@@ -4,31 +4,44 @@ import { body } from "express-validator";
 export const validateLoginUsername = () =>
   body("username")
     .trim()
+    .toLowerCase()
     .notEmpty()
-    .withMessage("Username must be filled")
+    .isString()
+    .withMessage("type error")
+    .withMessage("Username is required.")
     .custom((value) => !/\s/.test(value))
     .escape();
 export const validateLoginPassword = () =>
-  body("password", "Password must be filled").notEmpty().escape();
+  body("password", "Password is required.")
+    .notEmpty()
+    .isString()
+    .withMessage("type error")
+    .escape();
 // LOGIN //
 
 // SIGNUP //
 export const validateSignupUsername = () =>
   body("username")
     .trim()
+    .toLowerCase()
     .isLength({ min: 3 })
-    .withMessage("Username must be at least 3 characters")
+    .withMessage("Username should be at least 3 characters")
     .custom((value) => !/\s/.test(value))
     .withMessage("Username should not have a space")
     .isAlphanumeric()
     .withMessage("Username should not have a special character")
+    .custom((username) => {
+      const alphabetRegex = /^[a-z]/;
+      return alphabetRegex.test(username);
+    })
+    .withMessage("Username should starts with a letter of the alphabet")
     .escape();
 export const validateSignupPassword = () =>
-  body("password", "Password must be at least 6 characters")
+  body("password", "Password should be at least 6 characters")
     .isLength({ min: 6 })
     .escape();
 export const validateSignupPasswordconfirm = () =>
-  body("password-confirm", "Confirmation password must same as password")
+  body("confirmPassword", "Password confirmation must match the password.")
     .custom((value, { req }) => {
       return value === req.body.password;
     })

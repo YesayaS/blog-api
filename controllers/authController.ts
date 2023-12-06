@@ -20,15 +20,14 @@ export const loginPOST = [
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
-      const err = createError(400, errors.array()[0].msg);
-      return next(err);
+      return next(createError(400, errors.array()[0].msg));
     } else {
       passport.authenticate(
         "local",
         { session: false },
         (err: Error, user: UserInterface, info: any) => {
           if (err || !user) {
-            return res.status(401).json({ message: "Login failed" });
+            return next(createError(401, "Invalid username or password"));
           }
 
           const tokenExpires = 24 * 60 * 60; // (h * m * s)
