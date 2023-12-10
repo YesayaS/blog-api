@@ -37,7 +37,8 @@ export const loginPOST = [
             "your_secret_key",
             { expiresIn: tokenExpires }
           );
-          return res.json({ token });
+
+          return res.json({ token: token });
         }
       )(req, res, next);
     }
