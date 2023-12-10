@@ -6,14 +6,15 @@ export const validateLoginUsername = () =>
     .trim()
     .toLowerCase()
     .notEmpty()
+    .withMessage("Username is required.")
     .isString()
     .withMessage("type error")
-    .withMessage("Username is required.")
     .custom((value) => !/\s/.test(value))
     .escape();
 export const validateLoginPassword = () =>
-  body("password", "Password is required.")
+  body("password")
     .notEmpty()
+    .withMessage('"Password is required."')
     .isString()
     .withMessage("type error")
     .escape();
@@ -41,7 +42,7 @@ export const validateSignupPassword = () =>
     .isLength({ min: 6 })
     .escape();
 export const validateSignupPasswordconfirm = () =>
-  body("confirmPassword", "Password confirmation must match the password.")
+  body("confirm_password", "Password confirmation must match the password.")
     .custom((value, { req }) => {
       return value === req.body.password;
     })
