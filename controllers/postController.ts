@@ -64,7 +64,9 @@ export const postPOST = [
         is_published: req.body.ispublished,
       });
       const result = await post.save();
-      res.json({ msg: "Post created", success: true });
+      const id = result._id.toString();
+
+      res.json({ msg: "Post created", id: id });
     }
   }),
 ];
