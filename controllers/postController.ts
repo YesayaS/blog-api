@@ -61,7 +61,7 @@ export const postPOST = [
         comments: [],
         publication_date: new Date().toISOString(),
         author: (req.user as UserWithId)._id,
-        is_published: req.body.ispublished,
+        is_published: req.body.is_published,
       });
       const result = await post.save();
       const id = result._id.toString();
@@ -73,6 +73,8 @@ export const postPOST = [
 
 export const postPUT = [
   validatePostTitle(),
+  validatePostSubTitle(),
+  validatePostTitleImg(),
   validatePostContent(),
   validatePostPrivate(),
   asyncHandler(async function (req, res, next) {
@@ -95,6 +97,8 @@ export const postPUT = [
         }
         const updatedPostField = {
           title: req.body.title,
+          sub_title: req.body.sub_title,
+          title_img: req.body.title_img,
           content: req.body.content,
           is_published: req.body.ispublished,
         };
@@ -102,7 +106,8 @@ export const postPUT = [
           { _id: req.params.id },
           { $set: updatedPostField }
         );
-        res.json({ msg: "Post updated", success: true });
+
+        res.json({ msg: "Post created", id: req.params.id });
       } catch (err) {
         return next(err);
       }

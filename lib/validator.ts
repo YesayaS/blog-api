@@ -60,7 +60,7 @@ export const validatePostTitleImg = () =>
 export const validatePostContent = () =>
   body("content", "Content cannot be empty").notEmpty().isString().escape();
 export const validatePostPrivate = () =>
-  body("ispublished", "Published Type Error").isBoolean().escape();
+  body("is_published", "Published Type Error").isBoolean().escape();
 // POST //
 
 // COMMENT //
