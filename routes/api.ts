@@ -12,9 +12,11 @@ router.get("/", function (req, res, next) {
   res.json({ msg: "hi there!" });
 });
 
+// AUTH
 router.post("/login", authController.loginPOST);
 router.post("/signup", userController.signupPOST);
 
+// POST
 router.get("/post/:id", postController.postGET);
 router.post(
   "/post",
@@ -32,20 +34,20 @@ router.delete(
   postController.postDELETE
 );
 
+// ALL POST
 router.get("/posts", postController.postsGET);
 
+// COMMENT
 router.post(
   "/post/:postid/comment",
   passport.authenticate("jwt", { session: false }),
   commentController.commentPOST
 );
-
 router.put(
   "/post/:postid/comment/:commentid",
   passport.authenticate("jwt", { session: false }),
   commentController.commentPUT
 );
-
 router.delete(
   "/post/:postid/comment/:commentid",
   passport.authenticate("jwt", { session: false }),
