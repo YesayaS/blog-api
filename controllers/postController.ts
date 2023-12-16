@@ -40,6 +40,29 @@ export const postGET = [
   }),
 ];
 
+export const updatePostGET = [
+  asyncHandler(async function (req, res, next) {
+    const post = await Post.findById(req.params.id)
+      .populate({
+        path: "comments",
+        populate: { path: "author", select: "username" },
+      })
+      .populate("author", "username");
+
+    if (
+      post?.author._id.toString() !== (req.user as UserWithId)._id.toString()
+    ) {
+      throw createError(403, "Don't have permission to perform this action.");
+    }
+
+    if (!post) {
+      res.status(404).json({ error: "Page not found" });
+    }
+
+    res.json({ post, success: true });
+  }),
+];
+
 export const postPOST = [
   validatePostTitle(),
   validatePostSubTitle(),
