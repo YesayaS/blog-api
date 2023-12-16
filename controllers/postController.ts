@@ -142,7 +142,7 @@ export const postsGET = [
   asyncHandler(async function (req, res, next) {
     try {
       const posts = await Post.find({ is_published: true })
-        .select("title content publication_date author")
+        .select("-content -comments -is_published -__v")
         .sort({ publication_date: -1 })
         .limit(10)
         .populate("author", "username");
