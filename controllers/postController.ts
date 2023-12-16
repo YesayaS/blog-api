@@ -100,7 +100,7 @@ export const postPUT = [
           sub_title: req.body.sub_title,
           title_img: req.body.title_img,
           content: req.body.content,
-          is_published: req.body.ispublished,
+          is_published: req.body.is_published,
         };
         const result = await Post.updateOne(
           { _id: req.params.id },
@@ -153,5 +153,15 @@ export const postsGET = [
     } catch (err) {
       throw next(err);
     }
+  }),
+];
+
+export const myPostGET = [
+  asyncHandler(async function (req, res, next) {
+    const post = await Post.find({
+      author: (req.user as UserWithId)._id,
+    }).select(["-comments", "-title_img", "-content", "-author", "-__v"]);
+    if (!post) createError(404);
+    res.json({ posts: post });
   }),
 ];
