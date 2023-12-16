@@ -28,7 +28,7 @@ router.get("/post/:id", postController.postGET);
 router.get(
   "/post/edit/:id",
   passport.authenticate("jwt", { session: false }),
-  postController.updatePostGET
+  postController.editPostGET
 );
 router.post(
   "/post",

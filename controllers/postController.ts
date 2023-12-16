@@ -40,7 +40,7 @@ export const postGET = [
   }),
 ];
 
-export const updatePostGET = [
+export const editPostGET = [
   asyncHandler(async function (req, res, next) {
     const post = await Post.findById(req.params.id)
       .populate({
